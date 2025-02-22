@@ -1,0 +1,23 @@
+[
+    {
+        "nombre": "El Yunque",
+        "lat": 18.2955,
+        "lon": -65.8020,
+        "enlace": "https://www.google.com/maps?q=18.2955,-65.8020",
+        "categoria": "naturaleza"
+    },
+    {
+        "nombre": "Castillo San Felipe del Morro",
+        "lat": 18.4704,
+        "lon": -66.1192,
+        "enlace": "https://www.google.com/maps?q=18.4704,-66.1192",
+        "categoria": "historia"
+    },
+    {
+        "nombre": "Playa Flamenco",
+        "lat": 18.3281,
+        "lon": -65.3036,
+        "enlace": "https://www.google.com/maps?q=18.3281,-65.3036",
+        "categoria": "playa"
+    }
+]

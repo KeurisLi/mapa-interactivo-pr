@@ -1,100 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KMDEWBKMS9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KMDEWBKMS9');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Interactivo de Puerto Rico</title>
 
-    <!-- Agregar Leaflet.js (CDN) -->
+    <!-- Leaflet.js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
-        /* Asegurar que el mapa ocupe toda la pantalla */
-        #map {
-            height: 100vh;
-            width: 100%;
-        }
+        #map { height: 100vh; width: 100%; }
     </style>
 </head>
 <body>
 
     <h1>Mapa Interactivo de Puerto Rico</h1>
-    
-    <!-- Contenedor del mapa -->
     <div id="map"></div>
 
     <script>
-        // Inicializar el mapa centrado en Puerto Rico
         var map = L.map('map').setView([18.2208, -66.5901], 9);
 
-        // Agregar mapa base desde OpenStreetMap (gratis)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Función para obtener el icono desde el archivo JSON
+        // Función para crear iconos personalizados
         function getIcon(iconUrl) {
             return L.icon({
                 iconUrl: iconUrl,
-                iconSize: [40, 40],  // Tamaño del icono
-                iconAnchor: [20, 40], // Punto de anclaje
-                popupAnchor: [0, -40] // Posición del popup
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
             });
         }
 
-        // Cargar los iconos desde el archivo JSON
+        // Cargar iconos desde icons.json
         fetch("icons.json")
             .then(response => response.json())
             .then(icons => {
-                // Lugares de interés con categorías
-                var lugares = [
-                    {
-                        nombre: "El Yunque",
-                        lat: 18.2955,
-                        lon: -65.8020,
-                        enlace: "https://www.google.com/maps?q=18.2955,-65.8020",
-                        categoria: "naturaleza"
-                    },
-                    {
-                        nombre: "Castillo San Felipe del Morro",
-                        lat: 18.4704,
-                        lon: -66.1192,
-                        enlace: "https://www.google.com/maps?q=18.4704,-66.1192",
-                        categoria: "historia"
-                    },
-                    {
-                        nombre: "Playa Flamenco",
-                        lat: 18.3281,
-                        lon: -65.3036,
-                        enlace: "https://www.google.com/maps?q=18.3281,-65.3036",
-                        categoria: "playa"
-                    }
-                ];
-
-                // Agregar los marcadores al mapa con iconos cargados desde JSON
-                lugares.forEach(function(lugar) {
-                    let iconUrl = icons[lugar.categoria] || icons["default"]; // Obtener icono según categoría
-                    var marker = L.marker([lugar.lat, lugar.lon], { icon: getIcon(iconUrl) }).addTo(map)
-                        .bindPopup(`<b>${lugar.nombre}</b><br><a href="${lugar.enlace}" target="_blank">Ir a Google Maps</a>`);
-                });
+                // Ahora cargamos los lugares de interés
+                fetch("lugares.json")
+                    .then(response => response.json())
+                    .then(lugares => {
+                        lugares.forEach(function(lugar) {
+                            let iconUrl = icons[lugar.categoria] || icons["default"]; // Usa el icono correcto
+                            L.marker([lugar.lat, lugar.lon], { icon: getIcon(iconUrl) })
+                                .addTo(map)
+                                .bindPopup(`<b>${lugar.nombre}</b><br><a href="${lugar.enlace}" target="_blank">Ir a Google Maps</a>`);
+                        });
+                    })
+                    .catch(error => console.error("Error cargando lugares.json", error));
             })
             .catch(error => console.error("Error cargando icons.json", error));
-
     </script>
-
-
-
 
 </body>
 </html>
-
